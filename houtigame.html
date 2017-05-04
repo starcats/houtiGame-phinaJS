@@ -22,6 +22,7 @@ var ASSETS = {
   },
   sound: {
     ghostSE: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/c40ca137/sounds/onepoint29.mp3',
+    ghostSE2: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/c40ca137/sounds/onepoint29.mp3',
   },
 };
 
@@ -57,7 +58,7 @@ phina.define("MainScene", {
   },
   // スプライト画像作成
   update: function(app){
-    if (app.frame % 90 === 0) {
+    if (app.frame % 30 === 0) {
       var g = Ghost().addChildTo(this);
       g.setPosition(Random.randint(120,240), Random.randint(200,400));
       //AssetManager.get('sound', 'ghostSE').play();
@@ -75,14 +76,6 @@ phina.define("Ghost", {
     this.superInit('ghost');
     this.vx = Random.randint(-3, 3);
     this.vy = Random.randint(-3, 3);
-    
-    // タッチを有効
-    this.setInteractive(true);  
-
-    this.onpointstart = function() {
-      // 削除
-      this.remove();
-    }
   },
 
   update: function(app) {
@@ -99,16 +92,14 @@ phina.define("Ghost", {
     }
 
     if (app.pointer.getPointing()) {
-        // 徐々にタッチした位置に近づける
-        
-        var moveX = ((targetX - this.x) * 0.1);
-        var moveY = ((targetY - this.y) * 0.1);
-        this.moveBy(moveX, moveY);
-        console.log(this.x);
-        console.log(moveX);
-        console.log(targetX);
+      // 徐々にタッチした位置に近づける
+      var moveX = ((targetX - this.x) * 0.05);
+      var moveY = ((targetY - this.y) * 0.05);
+      this.moveBy(moveX, moveY);
+      if (this.left < targetX && this.right > targetX && this.top < targetY && this.bottom > targetY) {
+        this.remove();
+      }
     }
-    
   },
 });
 /*
