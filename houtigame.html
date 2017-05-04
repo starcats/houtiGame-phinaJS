@@ -1,0 +1,60 @@
+  <!doctype html>
+
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Particle | phina.js</title>
+  </head>
+  <body>
+  </body>
+</html>
+
+
+<script src='js/phina.js'></script>
+<script>
+// グローバルに展開
+phina.globalize();
+
+var ASSETS = {
+  // 画像
+  image: {
+    'ghost': 'images/ghost.png',
+  },
+};
+
+/*
+ * メインシーン
+ */
+phina.define("MainScene", {
+  // 継承
+  superClass: 'DisplayScene',
+  // コンストラクタ
+  init: function() {
+    // 親クラス初期化
+    this.superInit();
+    // 背景
+    this.backgroundColor = 'black';
+    // スプライト画像作成
+    var ghost = Sprite('ghost').addChildTo(this);
+    // 初期位置
+    ghost.x = this.gridX.center();
+    ghost.y = this.gridY.center();
+
+  },
+});
+
+/*
+ * メイン処理
+ */
+phina.main(function() {
+  // アプリケーションを生成
+  var app = GameApp({
+    startLabel: 'main', // MainScene から開始
+    assets: ASSETS,
+  });
+
+  // 実行
+  app.run();
+});
+
+</script>
