@@ -39,7 +39,24 @@ phina.define("MainScene", {
     // 初期位置
     ghost.x = Random.randint(0, 320);;
     ghost.y = Random.randint(200, 400);
-
+    // 初期速度
+    ghost.vx = Random.randint(-3, 3);
+    ghost.vy = Random.randint(-3, 3);
+    // 更新イベント
+    ghost.update = function() {
+      // 移動
+      ghost.x += ghost.vx;
+      ghost.y += ghost.vy;
+      // 画面端との判定
+      if (ghost.left < 0 || 640 < ghost.right) {
+        // 速度を反転する
+        ghost.vx *= -1;
+      }
+      if (ghost.top < 0 || 960 < ghost.bottom) {
+        // 速度を反転する
+        ghost.vy *= -1;
+      }
+    };
   },
 });
 
