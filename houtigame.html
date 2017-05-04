@@ -35,31 +35,39 @@ phina.define("MainScene", {
     // 背景
     this.backgroundColor = 'black';
     // スプライト画像作成
-    var ghost = Sprite('ghost').addChildTo(this);
-    // 初期位置
-    ghost.x = Random.randint(0, 320);;
-    ghost.y = Random.randint(200, 400);
-    // 初期速度
-    ghost.vx = Random.randint(-3, 3);
-    ghost.vy = Random.randint(-3, 3);
-    // 更新イベント
-    ghost.update = function() {
-      // 移動
-      ghost.x += ghost.vx;
-      ghost.y += ghost.vy;
-      // 画面端との判定
-      if (ghost.left < 0 || 640 < ghost.right) {
-        // 速度を反転する
-        ghost.vx *= -1;
-      }
-      if (ghost.top < 0 || 960 < ghost.bottom) {
-        // 速度を反転する
-        ghost.vy *= -1;
-      }
-    };
+    //var ghost = Sprite('ghost').addChildTo(this);
+    this.ghost = Ghost().addChildTo(this);
+    this.ghost.setPosition(320,480);
   },
 });
 
+/*
+  ゴースト
+*/
+phina.define("Ghost", {
+  superClass: 'Sprite',
+  init: function(bulletGroup) {
+    this.superInit('ghost');
+
+    this.bulletGroup = bulletGroup;
+    this.vx = Random.randint(-3, 3);
+    this.vy = Random.randint(-3, 3);
+    
+  },
+  update: function() {
+    this.x += this.vx;
+    this.y += this.vy;
+    // 画面端との判定
+    if (this.left < 0 || 640 < this.right) {
+      // 速度を反転する
+      this.vx *= -1;
+    }
+    if (this.top < 0 || 960 < this.bottom) {
+      // 速度を反転する
+      this.vy *= -1;
+    }
+  },
+});
 /*
  * メイン処理
  */
