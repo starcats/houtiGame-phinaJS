@@ -37,8 +37,8 @@ phina.define("MainScene", {
     // スプライト画像作成
     var ghost = Sprite('ghost').addChildTo(this);
     // 初期位置
-    ghost.x = this.gridX.center();
-    ghost.y = this.gridY.center();
+    ghost.x = Random.randint(0, 320);;
+    ghost.y = Random.randint(200, 400);
 
   },
 });
