@@ -20,11 +20,9 @@ var ASSETS = {
   image: {
     'ghost': 'images/ghost.png',
   },
-  /*
   sound: {
-    ghostSE: 'sounds/onepoint29.mp3',
+    ghostSE: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/c40ca137/sounds/onepoint29.mp3',
   },
-  */
 };
 
 /*
@@ -42,10 +40,10 @@ phina.define("MainScene", {
   },
   // スプライト画像作成
   update: function(app){
-    if (app.frame % 60 === 0) {
+    if (app.frame % 90 === 0) {
       var g = Ghost().addChildTo(this);
       g.setPosition(Random.randint(120,240), Random.randint(200,400));
-      //AssetManager.get('sound', 'ghostSE').play();
+      AssetManager.get('sound', 'ghostSE').play();
     }
   },
 });
