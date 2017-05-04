@@ -25,6 +25,9 @@ var ASSETS = {
   },
 };
 
+var targetX = 0;
+var targetY = 0;
+
 /*
  * メインシーン
  */
@@ -37,14 +40,39 @@ phina.define("MainScene", {
     this.superInit();
     // 背景
     this.backgroundColor = 'black';
+    //this.group = DisplayElement().addChildTo(this);
+    this.onpointstart = function(e) {
+      // 移動先を設定
+      targetX = e.pointer.x;
+      targetY = e.pointer.y;
+      console.log(this.targetX);
+    };
+    this.onpointmove = function(e) {
+      // 移動先を設定
+      targetX = e.pointer.x;
+      targetY = e.pointer.y;
+      console.log(this.targetX);
+    };
   },
   // スプライト画像作成
   update: function(app){
     if (app.frame % 90 === 0) {
       var g = Ghost().addChildTo(this);
       g.setPosition(Random.randint(120,240), Random.randint(200,400));
-      AssetManager.get('sound', 'ghostSE').play();
+      //AssetManager.get('sound', 'ghostSE').play();
     }
+      /*
+     // タッチイベント
+    this.onpointstart = function(e) {
+      // スプライトをタッチ位置に
+      if (this.group.x > e.pointer.x) {
+        this.group.x -= 1;
+      } else if (this.group.x < e.pointer.x) {
+        this.group.x += 1;
+      }
+      //this.group.y = e.pointer.y;
+    };
+    */
   },
 });
 
@@ -53,15 +81,16 @@ phina.define("MainScene", {
 */
 phina.define("Ghost", {
   superClass: 'Sprite',
-  init: function(bulletGroup) {
+  
+  init: function() {
     this.superInit('ghost');
-
-    this.bulletGroup = bulletGroup;
     this.vx = Random.randint(-3, 3);
     this.vy = Random.randint(-3, 3);
     
+    // タッチを有効
+    this.setInteractive(true);  
   },
-  update: function() {
+  update: function(app) {
     this.x += this.vx;
     this.y += this.vy;
     // 画面端との判定
@@ -73,6 +102,18 @@ phina.define("Ghost", {
       // 速度を反転する
       this.vy *= -1;
     }
+
+    if (app.pointer.getPointing()) {
+        // 徐々にタッチした位置に近づける
+        
+        var moveX = ((targetX - this.x) * 0.1);
+        var moveY = ((targetY - this.y) * 0.1);
+        this.moveBy(moveX, moveY);
+        console.log(this.x);
+        console.log(moveX);
+        console.log(targetX);
+    }
+    
   },
 });
 /*
