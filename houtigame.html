@@ -21,8 +21,8 @@ var ASSETS = {
     'ghost': 'images/ghost.png',
   },
   sound: {
-    ghostSE: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/c40ca137/sounds/onepoint29.mp3',
-    ghostSE2: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/c40ca137/sounds/onepoint29.mp3',
+    ghostSE: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/e3db2e43/sounds/ghost2.mp3',
+    ghostSE2: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/e3db2e43/sounds/ghost1.mp3',
   },
 };
 
@@ -61,7 +61,7 @@ phina.define("MainScene", {
     if (app.frame % 30 === 0) {
       var g = Ghost().addChildTo(this);
       g.setPosition(Random.randint(120,240), Random.randint(200,400));
-      //AssetManager.get('sound', 'ghostSE').play();
+      AssetManager.get('sound', 'ghostSE').play();
     }
   },
 });
@@ -98,6 +98,7 @@ phina.define("Ghost", {
       this.moveBy(moveX, moveY);
       if (this.left < targetX && this.right > targetX && this.top < targetY && this.bottom > targetY) {
         this.remove();
+        AssetManager.get('sound', 'ghostSE2').play();
       }
     }
   },
