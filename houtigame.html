@@ -19,6 +19,7 @@ var ASSETS = {
   // 画像
   image: {
     'ghost': 'images/ghost.png',
+    'bg': "images/bg.jpg"
   },
   sound: {
     ghostSE: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/e3db2e43/sounds/ghost2.mp3',
@@ -40,7 +41,11 @@ phina.define("MainScene", {
     // 親クラス初期化
     this.superInit();
     // 背景
-    this.backgroundColor = 'black';
+    //this.backgroundColor = 'black';
+    //背景画像
+    var bg = Sprite('bg').addChildTo(this);
+    bg.x = this.gridX.center();
+    bg.y = this.gridY.center();
     //タッチ開始
     this.onpointstart = function(e) {
       // 移動先を設定
@@ -61,7 +66,13 @@ phina.define("MainScene", {
     if (app.frame % 30 === 0) {
       var g = Ghost().addChildTo(this);
       g.setPosition(Random.randint(120,240), Random.randint(200,400));
-      AssetManager.get('sound', 'ghostSE').play();
+      //AssetManager.get('sound', 'ghostSE').play();
+    }
+  },
+  onkeydown: function(e) {
+    // space if push space
+    if (e.keyCode === 32) {
+      this.app.stop();
     }
   },
 });
@@ -76,6 +87,7 @@ phina.define("Ghost", {
     this.superInit('ghost');
     this.vx = Random.randint(-3, 3);
     this.vy = Random.randint(-3, 3);
+    this.alpha = 0.4;
   },
 
   update: function(app) {
@@ -102,6 +114,7 @@ phina.define("Ghost", {
       }
     }
   },
+  
 });
 /*
  * メイン処理
