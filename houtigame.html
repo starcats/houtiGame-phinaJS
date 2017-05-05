@@ -30,7 +30,7 @@ var ASSETS = {
 
 var targetX = 0;
 var targetY = 0;
-
+var score = 0;
 /*
  * メインシーン
  */
@@ -43,12 +43,17 @@ phina.define("MainScene", {
     this.superInit();
     // bgm を再生
     SoundManager.playMusic('BGM');
-    // 背景
-    //this.backgroundColor = 'black';
+    this.backgroundColor = 'black';//背景色
     //背景画像
     var bg = Sprite('bg').addChildTo(this);
     bg.x = this.gridX.center();
-    bg.y = this.gridY.center();
+    bg.y = this.gridY.center() + 60;
+    // ラベル表示
+    this.scoreLabel = phina.display.Label({
+      text: " ",
+      fill: "white",
+      fontSize: 30,
+    }).setPosition(this.gridX.center(), 30).addChildTo(this);
     //タッチ開始
     this.onpointstart = function(e) {
       // 移動先を設定
@@ -69,11 +74,14 @@ phina.define("MainScene", {
       g.setPosition(Random.randint(120,240), Random.randint(200,400));
       //AssetManager.get('sound', 'ghostSE').play();
     }
+    this.scoreLabel.text = "Ghostを捕まえた数: " + score;　
   },
+  //ゲーム停止処理
   onkeydown: function(e) {
     // space if push space
     if (e.keyCode === 32) {
       this.app.stop();
+      SoundManager.stopMusic('BGM');//BGMを止める
     }
   },
 });
@@ -99,7 +107,7 @@ phina.define("Ghost", {
       // 速度を反転する
       this.vx *= -1;
     }
-    if (this.top < 0 || 960 < this.bottom) {
+    if (this.top < 60 || 960 < this.bottom) {
       // 速度を反転する
       this.vy *= -1;
     }
@@ -112,10 +120,10 @@ phina.define("Ghost", {
       if (this.left < targetX && this.right > targetX && this.top < targetY && this.bottom > targetY) {
         this.remove();
         AssetManager.get('sound', 'ghostSE2').play();
+        score++;
       }
     }
   },
-  
 });
 /*
  * メイン処理
