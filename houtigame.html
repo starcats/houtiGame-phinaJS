@@ -28,9 +28,11 @@ var ASSETS = {
   },
 };
 
+var SCREEN_WIDTH = 640;
 var targetX = 0;
 var targetY = 0;
 var score = 0;
+var TO_DIST = SCREEN_WIDTH * 0.3;
 /*
  * メインシーン
  */
@@ -55,11 +57,13 @@ phina.define("MainScene", {
       fontSize: 30,
     }).setPosition(this.gridX.center(), 30).addChildTo(this);
     //タッチ開始
+    
     this.onpointstart = function(e) {
       // 移動先を設定
       targetX = e.pointer.x;
       targetY = e.pointer.y;
     };
+    
     //タッチ移動中
     this.onpointmove = function(e) {
       // 移動先を設定
@@ -97,6 +101,8 @@ phina.define("Ghost", {
     this.vx = Random.randint(-3, 3);
     this.vy = Random.randint(-3, 3);
     this.alpha = 0.6;
+
+    this.v = Vector2(0, 0);
   },
 
   update: function(app) {
@@ -111,18 +117,28 @@ phina.define("Ghost", {
       // 速度を反転する
       this.vy *= -1;
     }
+    var dv = Vector2.sub(this, app.pointer);
+    var d  = dv.length();
 
     if (app.pointer.getPointing()) {
-      // 徐々にタッチした位置に近づける
-      var moveX = ((targetX - this.x) * 0.05);
-      var moveY = ((targetY - this.y) * 0.05);
-      this.moveBy(moveX, moveY);
+
+      // 距離が一定以内だとポインターに集まる
+      if (d<TO_DIST) {
+        var moveX = ((targetX - this.x) * 0.05);
+        var moveY = ((targetY - this.y) * 0.05);
+        if (d < 90) {
+          var moveX = ((targetX - this.x) * 0.2);
+        var moveY = ((targetY - this.y) * 0.2);
+        }
+        this.moveBy(moveX, moveY);
+      }
       if (this.left < targetX && this.right > targetX && this.top < targetY && this.bottom > targetY) {
         this.remove();
         AssetManager.get('sound', 'ghostSE2').play();
         score++;
       }
     }
+    
   },
 });
 /*
