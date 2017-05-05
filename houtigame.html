@@ -24,6 +24,7 @@ var ASSETS = {
   sound: {
     ghostSE: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/e3db2e43/sounds/ghost2.mp3',
     ghostSE2: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/e3db2e43/sounds/ghost1.mp3',
+    BGM: 'https://cdn.rawgit.com/starcats/houtiGame-phinaJS/9e2b776b/sounds/bgm.mp3',
   },
 };
 
@@ -40,6 +41,8 @@ phina.define("MainScene", {
   init: function() {
     // 親クラス初期化
     this.superInit();
+    // bgm を再生
+    SoundManager.playMusic('BGM');
     // 背景
     //this.backgroundColor = 'black';
     //背景画像
@@ -51,14 +54,12 @@ phina.define("MainScene", {
       // 移動先を設定
       targetX = e.pointer.x;
       targetY = e.pointer.y;
-      console.log(this.targetX);
     };
     //タッチ移動中
     this.onpointmove = function(e) {
       // 移動先を設定
       targetX = e.pointer.x;
       targetY = e.pointer.y;
-      console.log(this.targetX);
     };
   },
   // スプライト画像作成
@@ -87,7 +88,7 @@ phina.define("Ghost", {
     this.superInit('ghost');
     this.vx = Random.randint(-3, 3);
     this.vy = Random.randint(-3, 3);
-    this.alpha = 0.4;
+    this.alpha = 0.6;
   },
 
   update: function(app) {
